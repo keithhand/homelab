@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: wildcard-hand-technology
+  namespace: kube-system
+spec:
+  secretName: tls-wildcard-hand-technology
+  issuerRef: 
+    kind: ClusterIssuer
+    name: cloudflare-issuer-hand-technology
+  commonName: "*.hand.technology"
+  dnsNames:
+    - "*.hand.technology"
