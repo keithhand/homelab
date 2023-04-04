@@ -13,3 +13,12 @@ variable "api_url" {
 variable "insecure" {
   type = bool
 }
+
+variable "wifi_credentials" {
+  type = object({
+    lan = string
+    iot = string
+    gaming = string
+    guest = string
+  })
+}
