@@ -13,3 +13,10 @@ variable "onepassword" {
     token = string
   })
 }
+
+variable "kubernetes" {
+  type = object({
+    config_context = string
+    config_path = string
+  })
+}
