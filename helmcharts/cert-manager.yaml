@@ -12,5 +12,12 @@ spec:
   repo: https://charts.jetstack.io
   chart: cert-manager
   targetNamespace: cert-manager
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: cert-manager
+  namespace: helmcharts
+spec:
   valuesContent: |-
     installCRDs: true

@@ -12,6 +12,13 @@ spec:
   repo: https://bjw-s.github.io/helm-charts
   chart: app-template
   targetNamespace: adguard-home
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: adguard-home
+  namespace: helmcharts
+spec:
   valuesContent: |-
     image:
       repository: adguard/adguardhome

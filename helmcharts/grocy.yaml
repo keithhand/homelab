@@ -12,6 +12,13 @@ spec:
   repo: https://bjw-s.github.io/helm-charts
   chart: app-template
   targetNamespace: grocy
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: grocy
+  namespace: helmcharts
+spec:
   valuesContent: |-
     image:
       repository: lscr.io/linuxserver/grocy

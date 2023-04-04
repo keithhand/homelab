@@ -12,6 +12,13 @@ spec:
   repo: https://bjw-s.github.io/helm-charts
   chart: app-template
   targetNamespace: home-assistant
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: home-assistant
+  namespace: helmcharts
+spec:
   valuesContent: |-
     image:
       repository: ghcr.io/home-assistant/home-assistant

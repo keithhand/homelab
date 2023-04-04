@@ -12,6 +12,13 @@ spec:
   repo: https://bjw-s.github.io/helm-charts
   chart: app-template
   targetNamespace: mqtt
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: mqtt
+  namespace: helmcharts
+spec:
   valuesContent: |-
     image:
       repository: eclipse-mosquitto
