@@ -1,0 +1,62 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: home-assistant
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: home-assistant
+  namespace: helmcharts
+spec:
+  repo: https://bjw-s.github.io/helm-charts
+  chart: app-template
+  targetNamespace: home-assistant
+  valuesContent: |-
+    image:
+      repository: ghcr.io/home-assistant/home-assistant
+      pullPolicy: Always
+      tag: stable
+
+    strategy:
+      type: Recreate
+
+    service:
+      main:
+        enabled: true
+        type: ClusterIP
+        ports:
+          http:
+            enabled: true
+            port: 80
+            targetPort: 8123
+      # this doesn't work, so diasabling
+      # sonos:
+      #   enabled: false
+      #   type: NodePort
+      #   ports:
+      #     listen:
+      #       enabled: true
+      #       port: 1400
+
+    ingress:
+      main:
+        enabled: true
+        tls: 
+          - hosts:
+            - hass.hand.technology
+        hosts:
+          - host: hass.hand.technology
+            paths:
+              - path: /
+                pathType: Prefix
+                service:
+                  port: 80
+
+    persistence:
+      config:
+        enabled: true
+        type: pvc
+        accessMode: ReadWriteOnce
+        size: 500Mi
+        mountPath: /config
