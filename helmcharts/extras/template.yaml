@@ -1,0 +1,19 @@
+# command to create:
+#    export CHARTNAME="helloworld"
+#    grep -o '^[^#]*' extras/template.yaml | envsubst > $CHARTNAME.yaml
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: $CHARTNAME
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: $CHARTNAME
+  namespace: helmcharts
+spec:
+  repo: https://bjw-s.github.io/helm-charts
+  chart: app-template
+  targetNamespace: $CHARTNAME
+  valuesContent: |-
