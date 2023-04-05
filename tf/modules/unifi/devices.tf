@@ -16,8 +16,12 @@ data "unifi_port_profile" "gaming" {
   name = unifi_network.gaming.name
 }
 
-data "unifi_port_profile" "kubernetes" {
-  name = unifi_network.kubernetes.name
+resource "unifi_port_profile" "kubernetes" {
+  name = "Kubernetes"
+  forward = "customize"
+  native_networkconf_id = unifi_network.kubernetes_nodes.id
+  tagged_networkconf_ids = [unifi_network.kubernetes_pods.id]
+  poe_mode = "off"
 }
 
 locals {
@@ -29,7 +33,7 @@ locals {
     udm_pro = {
       5 = {
         name = "odroid"
-        port_profile_id = data.unifi_port_profile.kubernetes.id
+        port_profile_id = unifi_port_profile.kubernetes.id
       }
       6 = {
         name = "desktop"
@@ -37,7 +41,7 @@ locals {
       }
       7 = {
         name = "rpi"
-        port_profile_id = data.unifi_port_profile.kubernetes.id
+        port_profile_id = unifi_port_profile.kubernetes.id
       }
       8 = {
         name = "usw_48_poe"

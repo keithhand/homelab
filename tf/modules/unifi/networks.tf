@@ -108,13 +108,13 @@ resource "unifi_network" "guest" {
   ipv6_ra_valid_lifetime = local.defaults.ipv6_ra_valid_lifetime
 }
 
-resource "unifi_network" "kubernetes" {
-  name = "Kubernetes"
+resource "unifi_network" "kubernetes_nodes" {
+  name = "Kubernetes Nodes"
   purpose = "corporate"
-  subnet = "10.8.0.0/20"
+  subnet = "10.8.0.0/29"
   vlan_id = "8"
-  dhcp_start = "10.8.8.1"
-  dhcp_stop  = "10.8.8.254"
+  dhcp_start = "10.8.0.2"
+  dhcp_stop  = "10.8.0.6"
   dhcp_enabled = true
   dhcp_dns = ["1.1.1.1", "1.0.0.1"]
 
@@ -123,6 +123,23 @@ resource "unifi_network" "kubernetes" {
   ipv6_pd_start = local.defaults.ipv6_pd_start
   ipv6_pd_stop = local.defaults.ipv6_pd_stop
   ipv6_ra_priority = local.defaults.ipv6_ra_priority
+  ipv6_ra_valid_lifetime = local.defaults.ipv6_ra_valid_lifetime
+}
+
+resource "unifi_network" "kubernetes_pods" {
+  name = "Kubernetes Pods"
+  purpose = "corporate"
+  subnet = "10.18.0.0/20"
+  vlan_id = "18"
+  dhcp_start = "10.18.9.1"
+  dhcp_stop  = "10.18.9.254"
+  dhcp_enabled = true
+  dhcp_dns = ["1.1.1.1", "1.0.0.1"]
+
+  # defaults set by unifi
+  dhcp_v6_dns_auto = local.defaults.dhcp_v6_dns_auto
+  dhcp_v6_lease = local.defaults.dhcp_v6_lease
+  ipv6_ra_preferred_lifetime = local.defaults.ipv6_ra_preferred_lifetime
   ipv6_ra_valid_lifetime = local.defaults.ipv6_ra_valid_lifetime
 }
 
@@ -149,7 +166,8 @@ locals {
     unifi_network.iot,
     unifi_network.gaming,
     unifi_network.guest,
-    unifi_network.kubernetes,
+    unifi_network.kubernetes_nodes,
+    unifi_network.kubernetes_pods,
     unifi_network.work,
   ]
 }
