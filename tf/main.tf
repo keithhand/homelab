@@ -291,6 +291,12 @@ locals {
   }
 }
 
+resource "kubernetes_namespace" "application_charts" {
+  metadata {
+    name = "application-charts"
+  }
+}
+
 module "helmcharts" {
   source = "./modules/helmcharts"
   for_each = local.helmcharts
@@ -300,7 +306,7 @@ module "helmcharts" {
     repo = lookup(lookup(each.value, "chart", {}), "repo", "https://bjw-s.github.io/helm-charts")
   }
   namespace = {
-    management = "helmcharts"
+    management = kubernetes_namespace.application_charts.id
     target = lookup(each.value, "namespace", each.key)
   }
   values = lookup(each.value, "values")

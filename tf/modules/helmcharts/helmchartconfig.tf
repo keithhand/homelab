@@ -7,7 +7,7 @@ resource "kubernetes_manifest" "helmchartconfig" {
       "namespace" = var.namespace.management
     }
     "spec" = {
-      "valuesContent" = var.values
+      "valuesContent" = yamlencode(var.values)
     }
   }
 }
