@@ -3,3 +3,6 @@
 *.tfstate*
 
 secrets.auto.tfvars
+
+# temp until find a better way to store these
+modules/unifi/clients.tf
