@@ -1,0 +1,44 @@
+chart:
+  name: app-template
+  repo: https://bjw-s.github.io/helm-charts
+namespace: mqtt
+values:
+  configMaps:
+    config:
+      data:
+        mosquitto.conf: |
+          listener 1883
+          persistence false
+          log_dest stdout
+          allow_anonymous true
+      enabled: true
+  image:
+    pullPolicy: Always
+    repository: eclipse-mosquitto
+    tag: "2.0"
+  persistence:
+    mqtt-config:
+      enabled: true
+      mountPath: /mosquitto/config
+      name: mqtt-config
+      type: configMap
+  probes:
+    liveness:
+      enabled: false
+    readiness:
+      enabled: false
+    startup:
+      enabled: false
+  service:
+    main:
+      enabled: true
+      ports:
+        http:
+          enabled: true
+          port: 9001
+        listen:
+          enabled: true
+          port: 1883
+      type: LoadBalancer
+  strategy:
+    type: Recreate

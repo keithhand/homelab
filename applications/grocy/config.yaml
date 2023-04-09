@@ -1,0 +1,43 @@
+chart:
+  name: app-template
+  repo: https://bjw-s.github.io/helm-charts
+namespace: grocy
+values:
+  env:
+    PGID: 1000
+    PUID: 1000
+    TZ: UTC
+  image:
+    pullPolicy: Always
+    repository: lscr.io/linuxserver/grocy
+    tag: latest
+  ingress:
+    main:
+      enabled: true
+      hosts:
+      - host: grocy.hand.technology
+        paths:
+        - path: /
+          pathType: Prefix
+          service:
+            port: 80
+      tls:
+      - hosts:
+        - grocy.hand.technology
+  persistence:
+    config:
+      accessMode: ReadWriteOnce
+      enabled: true
+      mountPath: /config
+      size: 50Mi
+      type: pvc
+  service:
+    main:
+      enabled: true
+      ports:
+        http:
+          enabled: true
+          port: 80
+      type: ClusterIP
+  strategy:
+    type: Recreate

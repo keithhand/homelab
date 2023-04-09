@@ -1,0 +1,86 @@
+chart:
+  name: app-template
+  repo: https://bjw-s.github.io/helm-charts
+namespace: adguard-home
+values:
+  dnsConfig:
+    nameservers:
+    - 1.1.1.1
+    - 1.0.0.1
+  dnsPolicy: ClusterFirstWithHostNet
+  image:
+    pullPolicy: IfNotPresent
+    repository: adguard/adguardhome
+    tag: latest
+  ingress:
+    admin:
+      enabled: false
+      hosts:
+      - host: adguard.admin.hand.technology
+        paths:
+        - path: /
+          pathType: Prefix
+          service:
+            name: adguard-home-admin
+            port: 3000
+      tls:
+      - hosts:
+        - adguard.admin.hand.technology
+    main:
+      enabled: true
+      hosts:
+      - host: adguard.hand.technology
+        paths:
+        - path: /
+          pathType: Prefix
+          service:
+            port: 80
+      tls:
+      - hosts:
+        - adguard.hand.technology
+  persistence:
+    config:
+      accessMode: ReadWriteOnce
+      enabled: true
+      mountPath: /opt/adguardhome/conf
+      size: 10Mi
+      type: pvc
+    work:
+      accessMode: ReadWriteOnce
+      enabled: true
+      mountPath: /opt/adguardhome/work
+      size: 1Gi
+      type: pvc
+  service:
+    admin:
+      enabled: false
+      ports:
+        admin:
+          enabled: true
+          port: 3000
+          protocol: TCP
+    dns-loadbalancer:
+      enabled: true
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.18.8.53
+      ports:
+        dns-tcp:
+          enabled: true
+          port: 53
+          protocol: TCP
+        dns-udp:
+          enabled: true
+          port: 53
+          protocol: UDP
+      type: LoadBalancer
+    main:
+      enabled: true
+      ports:
+        http:
+          enabled: true
+          port: 80
+        https:
+          enabled: true
+          port: 443
+  strategy:
+    type: Recreate
