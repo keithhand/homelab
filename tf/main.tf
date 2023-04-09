@@ -20,6 +20,26 @@ locals {
   helmcharts = {
     adguard-home = {
       values = {
+        # needed when first installed
+        # TODO: config via chart so setup isn't required
+        # "probes" = {
+        #   "liveness" = {
+        #     "enabled" = false
+        #   }
+        #   "readiness" = {
+        #     "enabled" = false
+        #   }
+        #   "startup" = {
+        #     "enabled" = false
+        #   }
+        # }
+        "dnsPolicy": "ClusterFirstWithHostNet",
+        "dnsConfig": {
+          "nameservers": [
+            "1.1.1.1",
+            "1.0.0.1"
+          ]
+        },
         "image": {
           "pullPolicy": "IfNotPresent",
           "repository": "adguard/adguardhome",
@@ -45,11 +65,38 @@ locals {
             "tls": [
               {
                 "hosts": [
-                  "adguardd.hand.technology"
+                  "adguard.hand.technology"
                 ]
               }
             ]
-          }
+          },
+          # needed when first installed
+          # TODO: config via chart so setup isn't required
+          "admin": {
+            "enabled": false,
+            "hosts": [
+              {
+                "host": "adguard.admin.hand.technology",
+                "paths": [
+                  {
+                    "path": "/",
+                    "pathType": "Prefix",
+                    "service": {
+                      "name": "adguard-home-admin"
+                      "port": 3000
+                    }
+                  }
+                ]
+              }
+            ]
+            "tls": [
+              {
+                "hosts": [
+                  "adguard.admin.hand.technology"
+                ]
+              }
+            ]
+          },
         },
         "persistence": {
           "config": {
@@ -78,21 +125,38 @@ locals {
               "https": {
                 "enabled": true,
                 "port": 443
-              }
+              },
             },
-            "type": "ClusterIP"
           },
-          "node-port-dns": {
+          "dns-loadbalancer": {
             "enabled": true,
-            "loadBalancerIP": "10.8.8.53",
+            "loadBalancerIP": "10.18.8.53",
+            "externalTrafficPolicy": "Local",
             "ports": {
-              "dns": {
+              "dns-tcp": {
+                "enabled": true,
+                "port": 53,
+                "protocol": "TCP"
+              },
+              "dns-udp": {
                 "enabled": true,
                 "port": 53,
                 "protocol": "UDP"
-              }
+              },
             },
             "type": "LoadBalancer"
+          },
+          # needed when first installed
+          # TODO: config via chart so setup isn't required
+          "admin": {
+            "enabled": false,
+            "ports": {
+              "admin": {
+                "enabled": true,
+                "port": 3000,
+                "protocol": "TCP",
+              }
+            }
           }
         },
         "strategy": {
@@ -303,6 +367,7 @@ module "helmcharts" {
   name = each.key
   chart = {
     name = lookup(lookup(each.value, "chart", {}), "name", "app-template")
+    # defaults: https://github.com/bjw-s/helm-charts/blob/main/charts/
     repo = lookup(lookup(each.value, "chart", {}), "repo", "https://bjw-s.github.io/helm-charts")
   }
   namespace = {

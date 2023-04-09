@@ -10,4 +10,8 @@ resource "kubernetes_manifest" "helmchartconfig" {
       "valuesContent" = yamlencode(var.values)
     }
   }
+  field_manager {
+    name = "valuesContent"
+    force_conflicts = true
+  }
 }
