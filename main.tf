@@ -38,8 +38,8 @@ module "helmcharts" {
   name = each.key
   chart = {
     # defaults: https://github.com/bjw-s/helm-charts/blob/main/charts/
-    repo = try(try(yamldecode(each.value.content).chart).repo, "https://bjw-s.github.io/helm-charts")
-    name = try(try(yamldecode(each.value.content).chart).name, "app-template")
+    repo = try(yamldecode(each.value.content).chart.repo, "https://bjw-s.github.io/helm-charts")
+    name = try(yamldecode(each.value.content).chart.name, "app-template")
   }
   namespace = {
     management = kubernetes_namespace.application_charts.id
