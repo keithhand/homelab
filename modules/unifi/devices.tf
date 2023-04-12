@@ -85,11 +85,11 @@ resource "unifi_device" "udm_pro" {
   # allow_adoption = true
 
   dynamic "port_override" {
-    for_each = [ for port_number in range(1, 12) : lookup(local.ports.udm_pro, port_number, null) != null ? local.ports.udm_pro[port_number] : null ]
+    for_each = [ for port_number in range(1, 12) : try(local.ports.udm_pro[port_number], null) != null ? local.ports.udm_pro[port_number] : null ]
     content {
       number = port_override.key + 1
-      name = port_override.value != null ? lookup(port_override.value, "name", local.ports.defaults.name) : local.ports.defaults.name
-      port_profile_id = port_override.value != null ? lookup(port_override.value, "port_profile_id", local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
+      name = port_override.value != null ? try(port_override.value.name, local.ports.defaults.name) : local.ports.defaults.name
+      port_profile_id = port_override.value != null ? try(port_override.value.port_profile_id, local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
     }
   }
 }
@@ -101,11 +101,11 @@ resource "unifi_device" "usw_48_poe" {
   # allow_adoption = true
 
   dynamic "port_override" {
-    for_each = [ for port_number in range(1, 53) : lookup(local.ports.usw_48_poe, port_number, null) != null ? local.ports.usw_48_poe[port_number] : null ]
+    for_each = [ for port_number in range(1, 53) : try(local.ports.usw_48_poe[port_number], null) != null ? local.ports.usw_48_poe[port_number] : null ]
     content {
       number = port_override.key + 1
-      name = port_override.value != null ? lookup(port_override.value, "name", local.ports.defaults.name) : local.ports.defaults.name
-      port_profile_id = port_override.value != null ? lookup(port_override.value, "port_profile_id", local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
+      name = port_override.value != null ? try(port_override.value.name, local.ports.defaults.name) : local.ports.defaults.name
+      port_profile_id = port_override.value != null ? try(port_override.value.port_profile_id, local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
     }
   }
 }
@@ -117,11 +117,11 @@ resource "unifi_device" "u6_iw" {
   # allow_adoption = true
 
   dynamic "port_override" {
-    for_each = [ for port_number in range(1, 5) : lookup(local.ports.u6_iw, port_number, null) != null ? local.ports.u6_iw[port_number] : null ]
+    for_each = [ for port_number in range(1, 5) : try(local.ports.u6_iw[port_number], null) != null ? local.ports.u6_iw[port_number] : null ]
     content {
       number = port_override.key + 1
-      name = port_override.value != null ? lookup(port_override.value, "name", local.ports.defaults.name) : local.ports.defaults.name
-      port_profile_id = port_override.value != null ? lookup(port_override.value, "port_profile_id", local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
+      name = port_override.value != null ? try(port_override.value.name, local.ports.defaults.name) : local.ports.defaults.name
+      port_profile_id = port_override.value != null ? try(port_override.value.port_profile_id, local.ports.defaults.port_profile_id) : local.ports.defaults.port_profile_id
     }
   }
 }
