@@ -24,13 +24,3 @@ spec:
           secretName: tls-wildcard-hand-technology
     deployment:
       dnsPolicy: ClusterFirstWithHostNet
----
-# apiVersion: traefik.containo.us/v1alpha1
-# kind: Middleware
-# metadata:
-#   name: test-auth
-#   namespace: kube-system
-# spec:
-#   forwardAuth:
-#     address: https://adguard.hand.technology/
-#     trustForwardHeader: true

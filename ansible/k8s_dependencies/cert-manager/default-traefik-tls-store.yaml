@@ -3,6 +3,11 @@ kind: TLSStore
 metadata:
   name: default
   namespace: kube-system
+  annotations:
+      meta.helm.sh/release-name: traefik
+      meta.helm.sh/release-namespace: kube-system
+  labels:
+      app.kubernetes.io/managed-by: Helm
 spec:
   defaultCertificate:
     secretName: tls-wildcard-hand-technology
