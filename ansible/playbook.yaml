@@ -1,0 +1,11 @@
+---
+
+- name: Install Cluster Dependencies
+  hosts: master
+  become: true
+  tasks:
+    - name: Rsync manifests directory
+      ansible.posix.synchronize:
+        src: "{{ playbook_dir }}/k8s_dependencies/"
+        dest: "/var/lib/rancher/k3s/server/manifests/ansible"
+      register: conf_yaml_manifests
