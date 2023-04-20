@@ -116,7 +116,6 @@ resource "unifi_network" "kubernetes_nodes" {
   dhcp_start = "10.8.0.2"
   dhcp_stop  = "10.8.0.6"
   dhcp_enabled = true
-  dhcp_dns = ["1.1.1.1", "1.0.0.1"]
 
   # defaults set by unifi
   ipv6_pd_interface = local.defaults.ipv6_pd_interface
@@ -134,7 +133,6 @@ resource "unifi_network" "kubernetes_pods" {
   dhcp_start = "10.18.9.1"
   dhcp_stop  = "10.18.9.254"
   dhcp_enabled = true
-  dhcp_dns = ["1.1.1.1", "1.0.0.1"]
 
   # defaults set by unifi
   dhcp_v6_dns_auto = local.defaults.dhcp_v6_dns_auto
