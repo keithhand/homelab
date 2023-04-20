@@ -59,7 +59,7 @@ values:
           enabled: true
           port: 3000
           protocol: TCP
-    dns-loadbalancer:
+    dns-loadbalancer-tcp:
       enabled: true
       externalTrafficPolicy: Local
       loadBalancerIP: 10.18.8.53
@@ -68,6 +68,12 @@ values:
           enabled: true
           port: 53
           protocol: TCP
+      type: LoadBalancer
+    dns-loadbalancer-udp:
+      enabled: true
+      externalTrafficPolicy: Local
+      loadBalancerIP: 10.18.8.53
+      ports:
         dns-udp:
           enabled: true
           port: 53
