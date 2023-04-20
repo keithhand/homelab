@@ -9,3 +9,6 @@
         src: "{{ playbook_dir }}/k8s_dependencies/"
         dest: "/var/lib/rancher/k3s/server/manifests/ansible"
       register: conf_yaml_manifests
+
+- name: Install k3s
+  ansible.builtin.import_playbook: modules/k3s-ansible/site.yml
