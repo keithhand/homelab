@@ -1,0 +1,36 @@
+## https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
+apiVersion: helm.cattle.io/v1
+kind: HelmChartConfig
+metadata:
+  name: traefik
+  namespace: kube-system
+spec:
+  bootstrap: true
+  valuesContent: |-
+    # https://docs.traefik.io/observability/logs/
+    logs:
+      access:
+        enabled: true
+        fields:
+          headers:
+            defaultMode: keep
+    service:
+      spec:
+        externalTrafficPolicy: Local
+        loadBalancerIP: 10.18.8.80
+    tlsStore:
+      default:
+        defaultCertificate:
+          secretName: tls-wildcard-hand-technology
+    deployment:
+      dnsPolicy: ClusterFirstWithHostNet
+---
+# apiVersion: traefik.containo.us/v1alpha1
+# kind: Middleware
+# metadata:
+#   name: test-auth
+#   namespace: kube-system
+# spec:
+#   forwardAuth:
+#     address: https://adguard.hand.technology/
+#     trustForwardHeader: true

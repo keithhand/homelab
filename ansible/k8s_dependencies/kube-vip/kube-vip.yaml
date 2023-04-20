@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube-vip
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: kube-vip
+  namespace: management-charts
+spec:
+  bootstrap: true
+  repo: https://kube-vip.github.io/helm-charts/
+  chart: kube-vip
+  targetNamespace: kube-vip
+  valuesContent: |-
+    # image:
+    #   tag: latest
+    config:
+      address: 10.18.8.1
+    env:
+      cp_namespace: kube-vip
+      cp_enable: "true"
+      svc_enable: "true"
+      # port: "6443"
+      svc_election: "true"
+      vip_leaderelection: "true"
+      vip_interface: k8s.0
+      vip_arp: "true"
+      vip_leaseduration: "5"
+      vip_renewdeadline: "3"
+      vip_retryperiod: "1"
+      vip_loglevel: 4
+      lb_enable: "false"
+      # lb_fwdmethod: direct
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+          - matchExpressions:
+            - key: node-role.kubernetes.io/master
+              operator: Exists
+          - matchExpressions:
+            - key: node-role.kubernetes.io/control-plane
+              operator: Exists
+---
+apiVersion: helm.cattle.io/v1
+kind: HelmChart
+metadata:
+  name: kube-vip-cloud-provider
+  namespace: management-charts
+spec:
+  bootstrap: true
+  repo: https://kube-vip.github.io/helm-charts/
+  chart: kube-vip-cloud-provider
+  targetNamespace: kube-vip
