@@ -7,16 +7,13 @@ resource "unifi_network" "network" {
   multicast_dns = var.multicast_dns
 
   dhcp_enabled = true
-  # TODO: support more than /24
-  subnet = "${var.subnet}/24"
-  # TODO: calculate these values
+  subnet       = "${var.subnet}/24"
   # dhcp_start = replace(var.subnet, "/\\d*$/", min_value)
   # dhcp_stop  = replace(var.subnet, "/\\d*$/", max_value)
   dhcp_start = replace(var.subnet, "/\\d*$/", 6)
   dhcp_stop  = replace(var.subnet, "/\\d*$/", 254)
 
   # Defaults from import
-  # TODO: do I need these?
   ipv6_ra_enable         = true
   ipv6_ra_priority       = "high"
   ipv6_ra_valid_lifetime = 0 # 86400?

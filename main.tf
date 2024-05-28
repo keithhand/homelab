@@ -1,6 +1,5 @@
 module "unifi" {
-  source = "./modules/unifi"
-  # TODO: Get an SSL cert
+  source   = "./modules/unifi"
   insecure = true
   api_url  = var.unifi-creds.api_url
   username = var.unifi-creds.username
