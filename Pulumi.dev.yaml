@@ -1,1 +1,8 @@
 encryptionsalt: v1:+QSU3uFSq9A=:v1:4emevR+Mk1dTPx+W:qdkqcxS123TsjMkpVWIZlr6svwDNig==
+config:
+  unifi:allowInsecure: true
+  unifi:api_url: https://10.0.0.1
+  unifi:username:
+    secure: v1:iZ4qrshYR4L+vgdb:sBB6O5hbTeJS4A31ZadpXu7rf+QZJg==
+  unifi:password:
+    secure: v1:nJHi/TWaEIL6j68z:XQ1TtfKqM8lgoP0Itt+guSwb6VbmTql69zC1BS/aV49clmA=
