@@ -16,7 +16,7 @@ resource "unifi_network" "network" {
   # Defaults from import
   ipv6_ra_enable         = true
   ipv6_ra_priority       = "high"
-  ipv6_ra_valid_lifetime = 0 # 86400?
+  ipv6_ra_valid_lifetime = 86400
   ipv6_pd_interface      = "wan"
   ipv6_pd_start          = "::2"
   ipv6_pd_stop           = "::7d1"
