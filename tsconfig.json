@@ -12,6 +12,8 @@
         "noImplicitReturns": true,
         "forceConsistentCasingInFileNames": true
     },
+    "include": ["components/**/*"],
+    "exclude": ["**/*.spec.ts"],
     "files": [
         "index.ts"
     ]
