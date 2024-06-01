@@ -1,5 +1,18 @@
 encryptionsalt: v1:+QSU3uFSq9A=:v1:4emevR+Mk1dTPx+W:qdkqcxS123TsjMkpVWIZlr6svwDNig==
 config:
+  homelab:networks:
+    - name: home
+      vlan: 39
+    - name: gaming
+      vlan: 33
+    - name: guest
+      purpose: guest
+      vlan: 69
+    - name: iot
+      vlan: 10
+    - name: sonos
+      vlan: 11
+      igmp: true
   unifi:allowInsecure: true
   unifi:api_url: https://10.0.0.1
   unifi:username:
