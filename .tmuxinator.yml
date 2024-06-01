@@ -1,0 +1,12 @@
+name: homelab
+
+pre_window: tmux setenv PULUMI_CONFIG_PASSPHRASE_FILE .password
+
+windows:
+  - editor:
+      layout: main-horizontal
+      panes:
+        - vim && tmux_exit
+        - pulumi:
+          - export PULUMI_CONFIG_PASSPHRASE_FILE=.password
+          - pulumi refresh
