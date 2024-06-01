@@ -1,0 +1,9 @@
+name: homelab
+runtime: nodejs
+
+description: A repo to setup and configure various services in my homelab
+
+config:
+  pulumi:tags:
+    value:
+      pulumi:template: ""
