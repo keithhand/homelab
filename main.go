@@ -12,6 +12,10 @@ type VlanConfig struct {
 	Name    string
 	Igmp    bool
 	Purpose string
+
+	subnet    string
+	dhcpStart string
+	dhcpStop  string
 }
 
 type PulumiNetworkConfig struct {
@@ -19,22 +23,29 @@ type PulumiNetworkConfig struct {
 	Vlans  []VlanConfig
 }
 
+func setVlanConfigDefaults(cfg *VlanConfig) {
+	if cfg.Purpose == "" {
+		cfg.Purpose = "corporate"
+	}
+	cfg.subnet = fmt.Sprintf("10.0.%d.1/24", cfg.Id)
+	cfg.dhcpStart = fmt.Sprintf("10.0.%d.6", cfg.Id)
+	cfg.dhcpStop = fmt.Sprintf("10.0.%d.254", cfg.Id)
+}
+
 func main() {
 	pulumi.Run(func(ctx *pulumi.Context) error {
 		cfg := config.New(ctx, "homelab")
 		var networkConfig PulumiNetworkConfig
 		cfg.RequireObject("network", &networkConfig)
-		for _, vlanConfig := range networkConfig.Vlans {
-			if vlanConfig.Purpose == "" {
-				vlanConfig.Purpose = "corporate"
-			}
-			unifi.NewNetwork(ctx, vlanConfig.Name, &unifi.NetworkArgs{
-				Purpose:         pulumi.String(vlanConfig.Purpose),
-				Subnet:          pulumi.String(fmt.Sprintf("10.0.%d.1/24", vlanConfig.Id)),
-				VlanId:          pulumi.IntPtr(vlanConfig.Id),
-				DhcpStart:       pulumi.String(fmt.Sprintf("10.0.%d.6", vlanConfig.Id)),
-				DhcpStop:        pulumi.String(fmt.Sprintf("10.0.%d.254", vlanConfig.Id)),
-				IgmpSnooping:    pulumi.Bool(vlanConfig.Igmp),
+		for _, vCfg := range networkConfig.Vlans {
+			setVlanConfigDefaults(&vCfg)
+			unifi.NewNetwork(ctx, vCfg.Name, &unifi.NetworkArgs{
+				Purpose:         pulumi.String(vCfg.Purpose),
+				Subnet:          pulumi.String(vCfg.subnet),
+				VlanId:          pulumi.IntPtr(vCfg.Id),
+				DhcpStart:       pulumi.String(vCfg.dhcpStart),
+				DhcpStop:        pulumi.String(vCfg.dhcpStop),
+				IgmpSnooping:    pulumi.Bool(vCfg.Igmp),
 				DhcpEnabled:     pulumi.Bool(true),
 				DhcpV6Start:     pulumi.String("::2"),
 				DhcpV6Stop:      pulumi.String("::7d1"),
