@@ -1,8 +1,6 @@
 name: homelab
-runtime: nodejs
-
+runtime: go
 description: A repo to setup and configure various services in my homelab
-
 config:
   pulumi:tags:
     value:

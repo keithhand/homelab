@@ -1,7 +1,7 @@
 encryptionsalt: v1:+QSU3uFSq9A=:v1:4emevR+Mk1dTPx+W:qdkqcxS123TsjMkpVWIZlr6svwDNig==
 config:
-  homelab:unifi:
-    networks:
+  homelab:network:
+    vlans:
       - name: home
         vlan: 39
       - name: gaming
