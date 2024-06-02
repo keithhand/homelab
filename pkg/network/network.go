@@ -10,26 +10,21 @@ import (
 
 type Network struct {
 	yamlconfig.NetworkYaml
-	Vlans []vlan.Vlan
 }
 
-// Bootstraps network resources
 func New(context *pulumi.Context, config *pulumiconfig.Config) *Network {
-	networkConfig := getNetworkConfig(config)
-	createNetworks(context, networkConfig.Vlans)
-	return &networkConfig
+	var n Network
+	n.init(config)
+	n.createVlans(context)
+	return &n
 }
 
-// Loops through and creates all networks in config
-func createNetworks(context *pulumi.Context, networks []vlan.Vlan) {
-	for _, config := range networks {
-		vlan.New(context, vlan.SetupConfig(&config))
+func (n *Network) init(config *pulumiconfig.Config) {
+	config.RequireObject(yamlconfig.CONFIG_NETWORK_KEY, &n.NetworkYaml)
+}
+
+func (n *Network) createVlans(context *pulumi.Context) {
+	for _, config := range n.NetworkYaml.Vlans {
+		vlan.New(context, config)
 	}
-}
-
-// Reads configuration from the Pulumi API
-func getNetworkConfig(config *pulumiconfig.Config) Network {
-	var networkConfig Network
-	config.RequireObject(yamlconfig.CONFIG_NETWORK_KEY, &networkConfig)
-	return networkConfig
 }

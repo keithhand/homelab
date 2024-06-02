@@ -6,7 +6,7 @@ const CONFIG_NAMESPACE = "homelab"
 const CONFIG_NETWORK_KEY = "network"
 
 type NetworkYaml struct {
-	VlanYamls []VlanYaml
+	Vlans []VlanYaml
 }
 
 type VlanYaml struct {
