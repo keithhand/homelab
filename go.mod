@@ -1,4 +1,4 @@
-module github.com/keithhand/homelab
+module homelab
 
 go 1.21
 

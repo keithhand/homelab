@@ -1,19 +1,15 @@
 package homelab
 
 import (
-	"github.com/spf13/cobra"
-
-	"github.com/keithhand/homelab/pkg/cmd/cli/up"
+	"homelab/pkg/cmd/builder"
 )
 
-func NewCommand() *cobra.Command {
-	c := &cobra.Command{
-		Use:   "homelab",
-		Short: "app to manage my homelab",
-		Long:  "An app to manage my homelab.",
-	}
+func StartCli() error {
+	var cmd builder.CommandBuilder = &builder.CobraCommandBuilder{}
 
-	c.AddCommand(up.NewCommand())
+	main := cmd.MainCmd()
+	up := cmd.UpCmd()
+	down := cmd.DownCmd()
 
-	return c
+	return cmd.Build(main, up, down).Execute()
 }
