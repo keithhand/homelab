@@ -10,3 +10,9 @@ install: build
 
 $(RUN_COMMANDS):
 	@go run $(ENTRY_PATH)/$(ENTRY_SCRIPT) $@
+
+test:
+	go test -coverprofile=coverage.out ./...
+
+coverage: test
+	go tool cover -html=coverage.out

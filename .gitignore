@@ -1,3 +1,6 @@
 /bin/
 
+# generated code coverage
+coverage.out
+
 .password

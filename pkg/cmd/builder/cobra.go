@@ -3,10 +3,12 @@ package builder
 import "github.com/spf13/cobra"
 
 type Cobra struct {
-	cmd *cobra.Command
+	Cmd *cobra.Command
 }
 
-func (c Cobra) withRun(fn func(Builder, []string)) func(*cobra.Command, []string) {
+type runCmd func(Builder, []string)
+
+func (c Cobra) withRun(fn runCmd) func(*cobra.Command, []string) {
 	if fn == nil {
 		return nil
 	}
@@ -17,7 +19,7 @@ func (c Cobra) withRun(fn func(Builder, []string)) func(*cobra.Command, []string
 
 func (c Cobra) NewCmd(cfg Command) Builder {
 	return &Cobra{
-		cmd: &cobra.Command{
+		Cmd: &cobra.Command{
 			Use:   cfg.Verb,
 			Short: cfg.ShortDesc,
 			Long:  cfg.LongDesc,
@@ -28,10 +30,10 @@ func (c Cobra) NewCmd(cfg Command) Builder {
 
 func (c Cobra) Attach(verbs ...Builder) {
 	for _, v := range verbs {
-		c.cmd.AddCommand(v.(*Cobra).cmd)
+		c.Cmd.AddCommand(v.(*Cobra).Cmd)
 	}
 }
 
 func (c Cobra) Execute() error {
-	return c.cmd.Execute()
+	return c.Cmd.Execute()
 }
