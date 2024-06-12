@@ -6,12 +6,17 @@ type Command struct {
 	Verb      string
 	ShortDesc string
 	LongDesc  string
+	Run       func(Runner, []string)
+}
+
+type Runner interface {
+	Execute() error
 }
 
 type Builder interface {
 	NewCmd(Command) Builder
 	Attach(...Builder)
-	Execute() error
+	Runner
 }
 
 func GetDefaultBuilder() Builder {
