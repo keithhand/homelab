@@ -12,7 +12,3 @@ type Builder interface {
 	Attach(...Builder)
 	Execute() error
 }
-
-func GetBuilder() Builder {
-	return &Cobra{}
-}
