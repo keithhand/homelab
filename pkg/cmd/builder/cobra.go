@@ -2,31 +2,22 @@ package builder
 
 import "github.com/spf13/cobra"
 
-type CobraCommandBuilder struct{}
+type Cobra struct {
+	*cobra.Command
+}
 
-func (b *CobraCommandBuilder) newCobraCommand(c Command) CommandBlock {
-	return &cobra.Command{
-		Use:   c.Verb,
-		Long:  c.LongDesc,
-		Short: c.ShortDesc,
+func (c *Cobra) NewCmd(cfg Command) Builder {
+	return &Cobra{
+		&cobra.Command{
+			Use:   cfg.Verb,
+			Short: cfg.ShortDesc,
+			Long:  cfg.LongDesc,
+		},
 	}
 }
 
-func (b *CobraCommandBuilder) MainCmd() CommandBlock {
-	return b.newCobraCommand(baseMainCmd())
-}
-
-func (b *CobraCommandBuilder) UpCmd() CommandBlock {
-	return b.newCobraCommand(baseUpCmd())
-}
-
-func (b *CobraCommandBuilder) DownCmd() CommandBlock {
-	return b.newCobraCommand(baseDownCmd())
-}
-
-func (b *CobraCommandBuilder) Build(main CommandBlock, verbs ...CommandBlock) CommandBlock {
-	for _, cmd := range verbs {
-		main.(*cobra.Command).AddCommand(cmd.(*cobra.Command))
+func (c *Cobra) Attach(verbs ...Builder) {
+	for _, v := range verbs {
+		c.AddCommand(v.(*Cobra).Command)
 	}
-	return main
 }
