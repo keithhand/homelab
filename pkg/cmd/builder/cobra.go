@@ -3,7 +3,7 @@ package builder
 import "github.com/spf13/cobra"
 
 type Cobra struct {
-	*cobra.Command
+	cmd *cobra.Command
 }
 
 func (c Cobra) withRun(fn func(Builder, []string)) func(*cobra.Command, []string) {
@@ -17,7 +17,7 @@ func (c Cobra) withRun(fn func(Builder, []string)) func(*cobra.Command, []string
 
 func (c Cobra) NewCmd(cfg Command) Builder {
 	return &Cobra{
-		&cobra.Command{
+		cmd: &cobra.Command{
 			Use:   cfg.Verb,
 			Short: cfg.ShortDesc,
 			Long:  cfg.LongDesc,
@@ -26,17 +26,12 @@ func (c Cobra) NewCmd(cfg Command) Builder {
 	}
 }
 
-func (c *Cobra) withRun(fn func(Runner, []string)) func(*cobra.Command, []string) {
-	if fn != nil {
-		return func(cmd *cobra.Command, args []string) {
-			fn(cmd, args)
-		}
+func (c Cobra) Attach(verbs ...Builder) {
+	for _, v := range verbs {
+		c.cmd.AddCommand(v.(*Cobra).cmd)
 	}
-	return nil
 }
 
-func (c *Cobra) Attach(verbs ...Builder) {
-	for _, v := range verbs {
-		c.AddCommand(v.(*Cobra).Command)
-	}
+func (c Cobra) Execute() error {
+	return c.cmd.Execute()
 }
