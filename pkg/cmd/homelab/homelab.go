@@ -26,14 +26,22 @@ func DownCmd() builder.Command {
 	}
 }
 
-func HomelabCli() error {
-	bldr := builder.GetBuilder()
+type CmdService struct {
+	Builder builder.Builder
+}
 
-	main := bldr.NewCmd(MainCmd())
-	up := bldr.NewCmd(UpCmd())
-	down := bldr.NewCmd(DownCmd())
-
+func (svc *CmdService) GetCommands() builder.Builder {
+	main := svc.Builder.NewCmd(MainCmd())
+	up := svc.Builder.NewCmd(UpCmd())
+	down := svc.Builder.NewCmd(DownCmd())
 	main.Attach(up, down)
+	return main
+}
 
-	return main.Execute()
+func HomelabCli() error {
+	svc := CmdService{
+		Builder: builder.Cobra{},
+	}
+	cmds := svc.GetCommands()
+	return cmds.Execute()
 }
